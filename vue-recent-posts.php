@@ -9,7 +9,7 @@ Author URI: http://rheinardkorf.com
 License: GPL2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: vue_recent_posts
-Domain Path: .../
+Domain Path: ./
 */
 
 /**
