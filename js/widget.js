@@ -24,7 +24,11 @@ function setupWidget( item ) {
 	var postCount = element.getAttribute( 'data-number' ) || 5;
 	var showDate = element.getAttribute( 'data-show-date' ) || false;
 
-	// Try localstorage
+	/**
+	 * To avoid not showing any content each subsequent load,
+	 * we will be saving the posts in localStorage and getting it here.
+	 * @type {Array}
+	 */
 	var initialPosts = JSON.parse( localStorage.getItem( widgetID ) ) || [];
 
 	new Vue( {
@@ -35,26 +39,45 @@ function setupWidget( item ) {
 		},
 		template: '<vue-recent-posts :posts="posts" :show-date="showDate"></vue-recent-posts>',
 		created: function() {
+
+			/**
+			 * Once the Vue instance is created we're going to fetch the latest posts via
+			 * WP REST content API endpoints.
+			 * @type {XMLHttpRequest}
+			 */
 			var request = new XMLHttpRequest();
+
 			request.open( 'GET', '/wp-json/wp/v2/posts?per_page=' + parseInt( postCount ) + '&order=desc', true );
 
+			/**
+			 * We need to hold a copy of the Vue as the callback will change scope.
+			 * @type {created}
+			 */
 			var vm = this;
+
+			/**
+			 * Note, this will happen for every instance of the widget.
+			 * This is because each Widget may have its own parameters.
+			 */
 			request.onload = function() {
 				if ( request.status >= 200 && request.status < 400 ) {
 					var resp = request.responseText;
+
+					/**
+					 * Update the component's posts so that Vue can work its magic.
+					 */
 					vm.posts = JSON.parse( resp );
-					// Also update localStorage
+
+					/**
+					 * Update local storage for better UX.
+					 */
 					localStorage.setItem( widgetID, resp );
 				}
 			}
 			request.send();
-		},
-		destroyed: function() {
-			console.log('I am destroyed.');
 		}
 	} );
 }
-
 
 /**
  * Vanilla version of $(document).ready()
