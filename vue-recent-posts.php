@@ -24,10 +24,8 @@ class Vue_Recent_Posts_Widget extends WP_Widget {
 		parent::__construct(
 			// Base ID of your widget
 			'Vue_Recent_Posts_Widget',
-
 			// Widget name will appear in UI
 			__( 'Vue Recent Posts', 'vue_recent_posts' ),
-
 			// Widget options
 			array(
 				'description'                 => __( 'Vue driven recent posts.', 'vue_recent_posts' ),
@@ -70,18 +68,18 @@ class Vue_Recent_Posts_Widget extends WP_Widget {
 		?>
 		<p><label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
 			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>"
-			       name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>"/>
+				   name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>"/>
 		</p>
 
 		<p><label
-				for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:' ); ?></label>
+					for="<?php echo $this->get_field_id( 'number' ); ?>"><?php _e( 'Number of posts to show:' ); ?></label>
 			<input class="tiny-text" id="<?php echo $this->get_field_id( 'number' ); ?>"
-			       name="<?php echo $this->get_field_name( 'number' ); ?>" type="number" step="1" min="1"
-			       value="<?php echo $number; ?>" size="3"/></p>
+				   name="<?php echo $this->get_field_name( 'number' ); ?>" type="number" step="1" min="1"
+				   value="<?php echo $number; ?>" size="3"/></p>
 
 		<p><input class="checkbox" type="checkbox"<?php checked( $show_date ); ?>
-		          id="<?php echo $this->get_field_id( 'show_date' ); ?>"
-		          name="<?php echo $this->get_field_name( 'show_date' ); ?>"/>
+				  id="<?php echo $this->get_field_id( 'show_date' ); ?>"
+				  name="<?php echo $this->get_field_name( 'show_date' ); ?>"/>
 			<label for="<?php echo $this->get_field_id( 'show_date' ); ?>"><?php _e( 'Display post date?' ); ?></label>
 		</p>
 		<?php
@@ -121,3 +119,18 @@ function vue_recent_posts_load_widget() {
 }
 
 add_action( 'widgets_init', 'vue_recent_posts_load_widget' );
+
+function vue_recent_posts_template() {
+	?>
+	<template id="vue-recent-posts-template" style="display:none">
+		<ul>
+			<li v-for="post in posts">
+				<a :href="post.link">{{ post.title.rendered }}</a>
+				<span v-if="showDate" class="post-date">{{ formatDate(post.date) }}</span>
+			</li>
+		</ul>
+	</template>
+	<?php
+}
+
+add_action( 'wp_footer', 'vue_recent_posts_template' );

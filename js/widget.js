@@ -3,8 +3,7 @@
  */
 Vue.component( 'vue-recent-posts', {
 	props: ['posts', 'showDate'],
-	template: '<ul><li v-for="post in posts"><a :href="post.link">{{ post.title.rendered }}</a> ' +
-			  '<span v-if="showDate" class="post-date">{{ formatDate(post.date) }}</span></li></ul>',
+	template: '#vue-recent-posts-template',
 	methods: {
 		formatDate: function( dateString ) {
 			var date = new Date( dateString );
@@ -83,18 +82,18 @@ function setupWidget( item ) {
  * Vanilla version of $(document).ready()
  * @param fn
  */
-function ready(fn) {
-	if (document.readyState != 'loading'){
+function ready( fn ) {
+	if ( document.readyState != 'loading' ) {
 		fn();
 	} else {
-		document.addEventListener('DOMContentLoaded', fn);
+		document.addEventListener( 'DOMContentLoaded', fn );
 	}
 }
 
 /**
  * Once the doc is ready, lets roll.
  */
-ready(function(){
+ready( function() {
 
 	/**
 	 * Grab all the Vue Recent Posts widgets.
@@ -125,4 +124,4 @@ ready(function(){
 			setupWidget( placement.container[0] );
 		}
 	} );
-});
+} );
