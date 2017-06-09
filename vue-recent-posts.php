@@ -122,14 +122,14 @@ add_action( 'widgets_init', 'vue_recent_posts_load_widget' );
 
 function vue_recent_posts_template() {
 	?>
-	<template id="vue-recent-posts-template" style="display:none">
+	<script id="vue-recent-posts-template" type="text/x-template">
 		<ul>
 			<li v-for="post in posts">
 				<a :href="post.link">{{ post.title.rendered }}</a>
 				<span v-if="showDate" class="post-date">{{ formatDate(post.date) }}</span>
 			</li>
 		</ul>
-	</template>
+	</script>
 	<?php
 }
 
